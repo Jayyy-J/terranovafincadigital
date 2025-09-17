@@ -1,0 +1,407 @@
+/* Hoja de Estilos para Terranova Finca Digital (Lanzamiento)
+  Clases y selectores en inglés para buenas prácticas.
+  Comentarios en español para claridad.
+*/
+
+/* ============================ */
+/* Variables y Estilos Globales */
+/* ============================ */
+:root {
+    /* Paleta de colores principal */
+    --color-primary-green: #2E7D32; /* Verde Agro-Tech */
+    --color-primary-dark: #1B5E20;  /* Verde oscuro para interacciones */
+    --color-accent-gold: #FFAB00;   /* Dorado/Ámbar para acentos */
+    --color-background-light: #F9F9F9; /* Gris muy claro para fondos */
+    --color-background-medium: #FFFFFF; /* Blanco para tarjetas */
+    --color-text-dark: #212121;     /* Negro suave para texto */
+    --color-text-light: #FFFFFF;    /* Blanco para texto sobre fondos oscuros */
+    
+    /* Tipografía */
+    --font-family-main: 'Poppins', sans-serif;
+
+    /* Otros */
+    --border-radius: 8px;
+    --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    --transition-main: all 0.3s ease;
+}
+
+/* Reseteo básico y configuración del 'box-sizing' */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth; /* Desplazamiento suave */
+}
+
+body {
+    font-family: var(--font-family-main);
+    color: var(--color-text-dark);
+    line-height: 1.7;
+    background-color: var(--color-background-medium);
+}
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* ============================ */
+/* Cabecera y Navegación        */
+/* ============================ */
+.main-header {
+    padding: 20px 0;
+    background-color: var(--color-background-medium);
+    border-bottom: 1px solid #e0e0e0;
+    position: sticky; /* Se queda fija al hacer scroll */
+    top: 0;
+    z-index: 1000;
+}
+
+.main-header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--color-primary-green);
+    text-decoration: none;
+}
+
+.main-nav {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.nav-link {
+    font-weight: 600;
+    color: var(--color-text-dark);
+    text-decoration: none;
+    transition: var(--transition-main);
+}
+
+.nav-link:hover {
+    color: var(--color-primary-green);
+}
+
+.nav-button {
+    font-weight: 600;
+    color: var(--color-primary-green);
+    background-color: transparent;
+    border: 2px solid var(--color-primary-green);
+    padding: 10px 20px;
+    border-radius: var(--border-radius);
+    text-decoration: none;
+    transition: var(--transition-main);
+}
+
+.nav-button:hover {
+    background-color: var(--color-primary-green);
+    color: var(--color-text-light);
+}
+
+/* ============================ */
+/* Sección Principal (Hero)     */
+/* ============================ */
+.hero-section {
+    background-color: var(--color-background-light);
+    padding: 100px 0;
+    text-align: center;
+}
+
+.hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.hero-content h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 20px;
+    color: var(--color-primary-dark);
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+    color: #555;
+}
+
+.cta-button {
+    display: inline-block;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-text-light);
+    background-color: var(--color-accent-gold);
+    padding: 15px 30px;
+    border-radius: var(--border-radius);
+    text-decoration: none;
+    transition: var(--transition-main);
+    box-shadow: 0 4px 10px rgba(255, 171, 0, 0.4);
+    border: none;
+}
+
+.cta-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(255, 171, 0, 0.5);
+}
+
+/* ============================ */
+/* Sección de Beneficios        */
+/* ============================ */
+.features-section {
+    padding: 80px 0;
+    background-color: var(--color-background-medium);
+}
+
+.section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 60px;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+}
+
+.feature-card {
+    background-color: #fff;
+    padding: 40px;
+    border-radius: var(--border-radius);
+    text-align: center;
+    box-shadow: var(--box-shadow);
+    transition: var(--transition-main);
+}
+
+.feature-card:hover {
+    transform: translateY(-10px);
+}
+
+.card-icon {
+    font-size: 3.5rem;
+    color: var(--color-primary-green);
+    margin-bottom: 20px;
+}
+
+.card-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+/* ============================ */
+/* Sección de Planes            */
+/* ============================ */
+.plans-section {
+    padding: 80px 0;
+    background-color: var(--color-background-light);
+}
+
+.plans-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    align-items: center; /* Alinea las tarjetas verticalmente */
+}
+
+.plan-card {
+    background-color: var(--color-background-medium);
+    padding: 30px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    text-align: center;
+    transition: var(--transition-main);
+    border: 2px solid transparent;
+}
+
+.plan-card.featured {
+    transform: scale(1.05); /* El plan destacado es un poco más grande */
+    border-color: var(--color-primary-green);
+    position: relative;
+}
+
+.featured-tag {
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--color-primary-green);
+    color: var(--color-text-light);
+    padding: 5px 15px;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.plan-price {
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: var(--color-primary-green);
+    margin: 15px 0;
+}
+
+.price-period {
+    font-size: 1rem;
+    font-weight: 400;
+    color: #777;
+}
+
+.plan-features {
+    list-style: none;
+    padding: 0;
+    margin: 30px 0;
+    text-align: left;
+}
+
+.plan-features li {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.plan-features i {
+    color: var(--color-primary-green);
+    font-size: 1.2rem;
+}
+
+.secondary-button {
+    background-color: transparent;
+    color: var(--color-primary-green);
+    border: 2px solid var(--color-primary-green);
+    box-shadow: none;
+}
+
+.secondary-button:hover {
+    background-color: var(--color-primary-green);
+    color: var(--color-text-light);
+    transform: translateY(0); /* Anula el efecto hover del botón principal */
+    box-shadow: none;
+}
+
+
+/* ============================ */
+/* Sección CTA (Formulario)     */
+/* ============================ */
+.cta-section {
+    background-color: var(--color-primary-green);
+    padding: 80px 0;
+    color: var(--color-text-light);
+}
+
+.cta-content {
+    text-align: center;
+}
+
+.cta-title {
+    color: var(--color-text-light);
+}
+
+.cta-text {
+    margin-bottom: 30px;
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+.cta-form {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.form-input {
+    flex-grow: 1;
+    padding: 15px;
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    font-family: var(--font-family-main);
+}
+
+.form-button {
+    white-space: nowrap; /* Evita que el texto del botón se rompa */
+}
+
+
+/* ============================ */
+/* Pie de Página                */
+/* ============================ */
+.main-footer {
+    padding: 30px 0;
+    text-align: center;
+    background-color: var(--color-background-light);
+    border-top: 1px solid #e0e0e0;
+}
+
+/* ============================ */
+/* Animaciones de Entrada       */
+/* ============================ */
+.animated-element {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.animated-element.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Retraso para los elementos en una secuencia */
+.hero-content > * { transition-delay: 0.2s; }
+.hero-content .subtitle { transition-delay: 0.4s; }
+.hero-content .cta-button { transition-delay: 0.6s; }
+.feature-card:nth-child(2) { transition-delay: 0.2s; }
+.feature-card:nth-child(3) { transition-delay: 0.4s; }
+.plan-card:nth-child(2) { transition-delay: 0.2s; }
+.plan-card:nth-child(3) { transition-delay: 0.4s; }
+
+
+/* ============================ */
+/* Diseño Responsivo (Móviles)  */
+/* ============================ */
+@media (max-width: 992px) {
+    .features-grid, .plans-grid {
+        grid-template-columns: 1fr; /* Una columna para tabletas y móviles */
+        gap: 30px;
+    }
+    .plans-grid {
+        max-width: 450px;
+        margin: 0 auto;
+    }
+
+    .plan-card.featured {
+        transform: scale(1); /* Desactiva el zoom en móviles */
+    }
+}
+
+
+@media (max-width: 768px) {
+    .hero-content h1 {
+        font-size: 2.5rem;
+    }
+    
+    .cta-form {
+        flex-direction: column; /* Apila el input y el botón */
+    }
+
+    .main-nav {
+        /* Se puede añadir lógica para un menú hamburguesa aquí en el futuro */
+        display: none; 
+    }
+}
