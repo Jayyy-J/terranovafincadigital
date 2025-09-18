@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles de Finca - Terranova Finca Digital</title>
+    <link rel="stylesheet" href="/src/css/dashboard.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="dashboard-header">
+        <div class="container">
+            <h1 class="logo">Terranova Finca Digital</h1>
+            <nav>
+                <span id="user-email"></span>
+                <button id="logout-button" class="logout-button">Cerrar Sesión</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="dashboard-main">
+        <div class="container">
+            <p class="breadcrumb"><a href="/dashboard.html">&larr; Volver a Mis Fincas</a></p>
+            <h2 id="farm-name-title">Cargando nombre de la finca...</h2>
+            
+            <!-- SECCIÓN PARA GESTIONAR ANIMALES -->
+            <section class="module-section">
+                <h3>Animales Registrados</h3>
+                <div id="animals-list" class="animal-list">
+                    <!-- Los animales se cargarán aquí con JavaScript -->
+                    <p>Cargando animales...</p>
+                </div>
+
+                <div class="form-card">
+                    <h4>Añadir Nuevo Animal</h4>
+                    <form id="add-animal-form">
+                        <div class="form-group">
+                            <label for="animal-code">Código / Identificador del Animal</label>
+                            <input type="text" id="animal-code" placeholder="Ej: 001, TAG-123" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="animal-breed">Raza</label>
+                            <input type="text" id="animal-breed" placeholder="Ej: Angus, Holstein">
+                        </div>
+                        <div class="form-group">
+                            <label for="animal-birthdate">Fecha de Nacimiento</label>
+                            <input type="date" id="animal-birthdate">
+                        </div>
+                        <div class="form-group">
+                            <label for="animal-weight">Peso (kg)</label>
+                            <input type="number" step="0.01" id="animal-weight" placeholder="Ej: 450.5">
+                        </div>
+                        <button type="submit" class="auth-button">Guardar Animal</button>
+                        <div id="animal-error-message" class="error-message"></div>
+                    </form>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        // --- LÓGICA DE AUTENTICACIÓN Y CIERRE DE SESIÓN (igual que en el dashboard) ---
+        const token = localStorage.getItem('authToken');
+        const userEmailSpan = document.getElementById('user-email');
+        const logoutButton = document.getElementById('logout-button');
+
+        if (!token) {
+            window.location.href = '/login.html';
+        } else {
+            try {
+                const payload = JSON.parse(atob(token.split('.')[1]));
+                userEmailSpan.textContent = `Bienvenido, ${payload.email}`;
+            } catch (error) {
+                localStorage.removeItem('authToken');
+                window.location.href = '/login.html';
+            }
+        }
+
+        logoutButton.addEventListener('click', () => {
+            localStorage.removeItem('authToken');
+            window.location.href = '/login.html';
+        });
+
+        // --- ¡NUEVA LÓGICA PARA GESTIONAR ANIMALES! ---
+        const farmNameTitle = document.getElementById('farm-name-title');
+        const animalsList = document.getElementById('animals-list');
+        const addAnimalForm = document.getElementById('add-animal-form');
+        const animalErrorMessage = document.getElementById('animal-error-message');
+
+        // Obtenemos el ID y el nombre de la finca desde la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const farmId = urlParams.get('id');
+        const farmName = urlParams.get('name');
+
+        if (!farmId || !farmName) {
+            // Si no hay ID o nombre, es un error, volvemos al dashboard
+            window.location.href = '/dashboard.html';
+        }
+
+        // Mostramos el nombre de la finca en el título
+        farmNameTitle.textContent = `Gestión de: ${farmName}`;
+        
+        // Función para obtener y mostrar los animales de ESTA finca
+        const fetchAnimals = async () => {
+            try {
+                const response = await fetch(`/api/animals/by-farm/${farmId}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (!response.ok) throw new Error('No se pudieron cargar los animales.');
+                const animals = await response.json();
+                renderAnimals(animals);
+            } catch (error) {
+                animalsList.innerHTML = `<p class="error-message">${error.message}</p>`;
+            }
+        };
+
+        // Función para "dibujar" los animales en la página
+        const renderAnimals = (animals) => {
+            if (animals.length === 0) {
+                animalsList.innerHTML = '<p>Aún no tienes animales registrados en esta finca. ¡Añade el primero!</p>';
+                return;
+            }
+            animalsList.innerHTML = animals.map(animal => `
+                <div class="animal-item">
+                    <div class="animal-details">
+                        <strong>Código: ${animal.animal_code}</strong>
+                        <span>Raza: ${animal.breed || 'N/A'}</span>
+                        <span>Peso: ${animal.weight_kg || 'N/A'} kg</span>
+                    </div>
+                </div>
+            `).join('');
+        };
+
+        // Evento para manejar el envío del formulario de nuevo animal
+        addAnimalForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            animalErrorMessage.textContent = '';
+            
+            const animalData = {
+                farm_id: farmId,
+                animal_code: document.getElementById('animal-code').value,
+                breed: document.getElementById('animal-breed').value,
+                birth_date: document.getElementById('animal-birthdate').value || null,
+                weight_kg: document.getElementById('animal-weight').value || null
+            };
+
+            try {
+                const response = await fetch('/api/animals', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(animalData)
+                });
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.message);
+                
+                addAnimalForm.reset(); // Limpiamos el formulario
+                fetchAnimals(); // Recargamos la lista de animales
+
+            } catch (error) {
+                animalErrorMessage.textContent = error.message;
+            }
+        });
+
+        // Al cargar la página, buscamos los animales inmediatamente
+        fetchAnimals();
+    </script>
+</body>
+</html>

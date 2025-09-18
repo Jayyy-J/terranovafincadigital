@@ -1,0 +1,240 @@
+/* Hoja de Estilos para las páginas de autenticación y el dashboard
+  Clases y selectores en inglés para buenas prácticas.
+  Comentarios en español para claridad.
+*/
+
+/* ============================ */
+/* Variables y Estilos Globales */
+/* ============================ */
+:root {
+    --color-primary-green: #2E7D32;
+    --color-primary-dark: #1B5E20;
+    --color-background-light: #F9F9F9;
+    --color-background-medium: #FFFFFF;
+    --color-text-dark: #212121;
+    --color-text-light: #FFFFFF;
+    --color-error: #D32F2F;
+    --font-family-main: 'Poppins', sans-serif;
+    --border-radius: 8px;
+    --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+body {
+    font-family: var(--font-family-main);
+    color: var(--color-text-dark);
+    background-color: var(--color-background-light);
+    margin: 0;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+
+/* ============================ */
+/* Estilos de Autenticación (Login/Register) */
+/* ============================ */
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.auth-card {
+    background-color: var(--color-background-medium);
+    padding: 40px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.auth-card h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--color-primary-green);
+    margin-bottom: 10px;
+}
+
+.auth-card h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.auth-card p {
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    font-family: var(--font-family-main);
+}
+
+.auth-button {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: var(--border-radius);
+    background-color: var(--color-primary-green);
+    color: var(--color-text-light);
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.auth-button:hover {
+    background-color: var(--color-primary-dark);
+}
+
+.error-message {
+    color: var(--color-error);
+    margin-top: -15px;
+    margin-bottom: 15px;
+    min-height: 1.2em; /* Reserva espacio para el mensaje de error */
+}
+
+.auth-footer {
+    margin-top: 20px;
+}
+
+.auth-footer a {
+    color: var(--color-primary-green);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+/* ============================ */
+/* Estilos del Dashboard        */
+/* ============================ */
+.dashboard-header {
+    background-color: var(--color-background-medium);
+    padding: 20px 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.dashboard-header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dashboard-header nav {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.logout-button {
+    background-color: transparent;
+    border: 2px solid var(--color-error);
+    color: var(--color-error);
+    padding: 8px 16px;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.logout-button:hover {
+    background-color: var(--color-error);
+    color: var(--color-text-light);
+}
+
+.dashboard-main {
+    padding: 40px 0;
+}
+
+/* ... (todos tus estilos anteriores de dashboard.css) ... */
+
+/* ============================ */
+/* Estilos para Fincas y Animales */
+/* ============================ */
+
+.farm-item-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.farm-item {
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.2s ease;
+}
+
+.farm-item:hover {
+    background-color: #f9f9f9;
+}
+
+.farm-item strong {
+    font-size: 1.2rem;
+}
+
+.breadcrumb {
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+}
+
+.breadcrumb a {
+    color: var(--color-primary-green);
+    text-decoration: none;
+    transition: var(--transition-main);
+}
+
+.breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+.animal-list {
+    margin-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.animal-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.animal-item:hover {
+    background-color: #f9f9f9;
+}
+
+.animal-details strong {
+    font-size: 1.1rem;
+    color: var(--color-text-dark);
+}
+
+.animal-details span {
+    color: #666;
+    margin-left: 15px;
+}
+
+.coming-soon {
+    color: #777;
+    font-style: italic;
+}

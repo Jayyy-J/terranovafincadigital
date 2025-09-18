@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Terranova Finca Digital</title>
+    <link rel="stylesheet" href="/src/css/dashboard.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="dashboard-header">
+        <div class="container">
+            <h1 class="logo">Terranova Finca Digital</h1>
+            <nav>
+                <span id="user-email"></span>
+                <button id="logout-button" class="logout-button">Cerrar Sesión</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="dashboard-main">
+        <div class="container">
+            <h2>Panel de Control</h2>
+            
+            <section class="module-section">
+                <h3>Mis Fincas</h3>
+                <div id="farms-list" class="farms-list">
+                    <p>Cargando fincas...</p>
+                </div>
+
+                <div class="form-card">
+                    <h4>Añadir Nueva Finca</h4>
+                    <form id="add-farm-form">
+                        <div class="form-group">
+                            <label for="farm-name">Nombre de la Finca</label>
+                            <input type="text" id="farm-name" placeholder="Ej: Finca La Esperanza" required>
+                        </div>
+                        <button type="submit" class="auth-button">Guardar Finca</button>
+                        <div id="farm-error-message" class="error-message"></div>
+                    </form>
+                </div>
+            </section>
+
+            <section class="module-section">
+                <h3>Ganadería</h3>
+                <p class="coming-soon">Próximamente: Gestión de animales, historiales y producción.</p>
+            </section>
+            <section class="module-section">
+                <h3>Agricultura</h3>
+                <p class="coming-soon">Próximamente: Control de lotes, insumos y cosechas.</p>
+            </section>
+
+        </div>
+    </main>
+
+    <script>
+        const token = localStorage.getItem('authToken');
+        const userEmailSpan = document.getElementById('user-email');
+        const logoutButton = document.getElementById('logout-button');
+
+        if (!token) {
+            window.location.href = '/login.html';
+        } else {
+            try {
+                const payload = JSON.parse(atob(token.split('.')[1]));
+                userEmailSpan.textContent = `Bienvenido, ${payload.email}`;
+            } catch (error) {
+                localStorage.removeItem('authToken');
+                window.location.href = '/login.html';
+            }
+        }
+
+        logoutButton.addEventListener('click', () => {
+            localStorage.removeItem('authToken');
+            window.location.href = '/login.html';
+        });
+
+        const farmsList = document.getElementById('farms-list');
+        const addFarmForm = document.getElementById('add-farm-form');
+        const farmNameInput = document.getElementById('farm-name');
+        const farmErrorMessage = document.getElementById('farm-error-message');
+
+        const fetchFarms = async () => {
+            try {
+                const response = await fetch('/api/farms', {
+                    method: 'GET',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (!response.ok) throw new Error('No se pudieron cargar las fincas.');
+                const farms = await response.json();
+                renderFarms(farms);
+            } catch (error) {
+                farmsList.innerHTML = `<p class="error-message">${error.message}</p>`;
+            }
+        };
+
+        const renderFarms = (farms) => {
+            if (farms.length === 0) {
+                farmsList.innerHTML = '<p>Aún no tienes fincas registradas. ¡Crea la primera!</p>';
+                return;
+            }
+            // --- ¡ESTE ES EL CAMBIO CLAVE! ---
+            // Creamos un enlace (<a>) para cada finca.
+            // El 'href' apunta a 'farm-details.html' y le pasamos el ID y el nombre
+            // como parámetros en la URL (?id=...&name=...).
+            farmsList.innerHTML = farms.map(farm => `
+                <a href="/farm-details.html?id=${farm.farm_id}&name=${encodeURIComponent(farm.farm_name)}" class="farm-item-link">
+                    <div class="farm-item">
+                        <strong>${farm.farm_name}</strong>
+                    </div>
+                </a>
+            `).join('');
+        };
+
+        addFarmForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            farmErrorMessage.textContent = '';
+            const farmName = farmNameInput.value;
+            try {
+                const response = await fetch('/api/farms', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ farm_name: farmName })
+                });
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.message || 'No se pudo crear la finca.');
+                farmNameInput.value = '';
+                fetchFarms();
+            } catch (error) {
+                farmErrorMessage.textContent = error.message;
+            }
+        });
+        
+        fetchFarms();
+    </script>
+</body>
+</html>
